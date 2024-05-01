@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,22 +7,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react";
-
-import { Header } from "shared/ui";
-import { getUserFromSession, CurrentUser } from "shared/api";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader = ({ request }: LoaderFunctionArgs) =>
-  getUserFromSession(request);
-
 export default function App() {
-  const user = useLoaderData<typeof loader>();
-
   return (
     <html lang="en">
       <head>
@@ -48,10 +39,7 @@ export default function App() {
         `}</style>
       </head>
       <body>
-        <CurrentUser.Provider value={user}>
-          <Header />
-          <Outlet />
-        </CurrentUser.Provider>
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
